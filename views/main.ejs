@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Youtube Video Downloader</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<style>
+      body{
+            background-color: black;
+      }
+
+      .form-div{
+            background-color: lightgray;
+            position: relative;
+            top: 150px;
+            margin: auto;
+            width: 50%;
+            border-radius: 5px;
+      }
+
+      .form-div input{
+            background: none;
+            border: 1px solid black;
+      }
+
+      .form-div label{
+            font-size: x-large;
+            font-weight: bolder;
+      }
+
+     .btns-div{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+     }
+     
+     .btns-div button{
+            width: 100px;
+     } 
+
+     #text{
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-weight: bolder;
+      text-align: center;
+     }
+
+</style>
+<body>
+      
+      <div class="container">
+            <div class="form-div border p-5">
+                  <form action="#">
+                        <label class="form-label">Enter URL</label>
+                        <input
+                              id="input"
+                              type="text"
+                              class="form-control"
+                              name="url"
+                              aria-describedby="helpId"
+                              placeholder="e.g., https://youtu.be/"
+                        />
+                        <p id="text"></p>
+                        <div class="btns-div">
+                              <button class="btn btn-primary mt-2" id="submit">Download</button>
+                              <button class="btn btn-success mt-2" id="reset">Reset</button>
+                        </div>
+                  </form>
+            </div>
+            
+      </div>
+
+
+      <script>
+            const form = document.querySelector('form');
+            const text = document.querySelector('#text');
+            const reset = document.querySelector('#reset');
+            const submit = document.querySelector('#submit');
+            
+            submit.addEventListener("click", async (e)=>{
+                  e.preventDefault();
+                  text.textContent = "Fetching Data . . . ";
+
+                  const url = form.url.value;
+                  try {
+                        const result = await fetch("/", {
+                        method: "POST",
+                        body: JSON.stringify( {url} ),
+                        headers: { "Content-type": "application/json" },
+                  });
+
+                  const data = await result.json();
+                  if(data.redirectUrl){
+                        window.location.href = data.redirectUrl;
+                  }
+        
+                  } catch (error) {
+                      console.log(error);  
+                  }
+            })
+
+            reset.addEventListener('click', (e)=>{
+                  e.preventDefault();
+                  text.textContent = "";
+                  form.input.value = "";
+            });
+      </script>
+</body>
+</html>
