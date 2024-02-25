@@ -6,6 +6,8 @@ const ytdl = require('ytdl-core');
 
 app.set('view engine', 'ejs');
 app.use(express.json());
+
+
 app.listen(3000);
 
 app.set(express.urlencoded({extended: true}));
@@ -13,6 +15,8 @@ app.set(express.urlencoded({extended: true}));
 app.get('/', (req, res)=>{
       res.render('main');
 })
+
+
 
 app.post('/', async (req, res)=>{
       const {url} = req.body;
